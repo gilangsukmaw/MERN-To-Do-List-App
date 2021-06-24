@@ -1,8 +1,10 @@
 import React from "react";
+import Navbar from "../Navbar/Navbar";
 
-const index = () => {
+const Landing = () => {
   return (
     <>
+      <Navbar />
       <div className="main">
         <div className="d-flex justify-content-center align-items-center h-100 p-2">
           <div className="text-center">
@@ -14,4 +16,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Landing;

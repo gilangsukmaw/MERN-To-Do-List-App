@@ -22,6 +22,9 @@
     }
     .nav-dropdown {
       color: #1c2130;
+      &:hover {
+        color: #414963;
+      }
     }
   }
 }
@@ -52,16 +55,34 @@
     }
   }
 }
-.profile-content {
-  padding-top: 4rem;
-  .container-fluid {
-    padding-top: 4rem;
-    .row {
-      width: 300px;
-      .vl {
-        border-left: 1px solid rgb(112, 112, 112);
-        height: 100%;
-      }
+
+.update-profile {
+  font-family: "Montserrat", sans-serif;
+  margin-top: 5rem;
+
+  background-color: white;
+  .validation {
+    color: red;
+    font-size: 12px;
+    margin-left: 1rem;
+  }
+  .btn {
+    font-weight: bold;
+    width: 100%;
+    background-color: #1c2130;
+    padding: 0.5rem;
+    color: white;
+    &:hover {
+      background-color: #282f44;
+      color: white;
+    }
+  }
+  .footer {
+    margin-top: 2rem;
+    text-align: center;
+
+    h6 {
+      margin-bottom: 2rem;
     }
   }
 }

@@ -1,13 +1,13 @@
 const Data = [
   {
-    id: 1,
+    _id: 1,
     name: "Nyesss",
     description: "Lorem,  voluptatum rerum perferendis ipsa.",
     date: "adsasd",
     status: true,
   },
   {
-    id: 2,
+    _id: 2,
     name: "Blokos",
     description:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam in molestias voluptatum rerum perferendis ipsa.",
@@ -15,7 +15,7 @@ const Data = [
     status: false,
   },
   {
-    id: 3,
+    _id: 3,
     name: "Tolols",
     description:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam in molestias voluptatum rerum perferendis ipsa.",

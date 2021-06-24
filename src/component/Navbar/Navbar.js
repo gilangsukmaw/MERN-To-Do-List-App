@@ -1,36 +1,49 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import { Navbar, NavDropdown, Container } from "react-bootstrap";
-import AuthContext from "../../context/AuthContext";
-import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../context/AuthContext";
+import { Link, useHistory } from "react-router-dom";
 
-const NavbarComponent = () => {
-  const [userInfo, setUserInfo] = useState([]);
-  const { loggedIn } = useContext(AuthContext);
-  const { getLoggedIn } = useContext(AuthContext);
+const NavbarComponent = (props) => {
+  toast.configure();
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
+  const history = useHistory();
+  const { currentUser, logout } = useAuth();
 
-  const onLogout = async () => {
-    axios.get("https://simple-to-do-list-app-0.herokuapp.com/api/v1/logout");
-    getLoggedIn();
-
-    window.location.reload();
+  const notifyWarn = (value) => {
+    toast.warn(value, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
-  const getUserInfo = async () => {
-    axios
-      .get("https://simple-to-do-list-app-0.herokuapp.com/api/v1/")
-      .then((response) => {
-        const resData = response.data;
-        setUserInfo(resData);
-        console.log(userInfo);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const notifyErr = (value) => {
+    toast.error(value, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+
+      notifyWarn("You are Log out!");
+      history.push("/");
+    } catch (err) {
+      notifyErr("Failed to logout");
+    }
+  };
+
   return (
     <>
       <Navbar>
@@ -40,17 +53,20 @@ const NavbarComponent = () => {
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            {loggedIn ? (
+            {currentUser ? (
               <>
-                <LoggedInNav userInfo={userInfo} onLogout={onLogout} />
+                <LoggedInNav
+                  currentUser={currentUser.email}
+                  handleLogout={handleLogout}
+                />
               </>
             ) : (
               <>
                 <Navbar.Text className="mr-4">
-                  <a href="/login">Login</a>
+                  <a href="/login">Log in</a>
                 </Navbar.Text>
                 <Navbar.Text>
-                  <a href="/register">Register</a>
+                  <a href="/signup">Sign Up</a>
                 </Navbar.Text>
               </>
             )}
@@ -65,13 +81,15 @@ const LoggedInNav = (props) => {
   return (
     <>
       <Navbar.Text className="mr-4">
-        <a href="/task">Task List</a>
+        <Link to="/app">Task list</Link>
       </Navbar.Text>
-      <NavDropdown title={props.userInfo.username} id="collasible-nav-dropdown">
-        <NavDropdown.Item href="/profile" className="nav-dropdown">
-          Profile
+      <NavDropdown title={props.currentUser} id="collasible-nav-dropdown">
+        <NavDropdown.Item className="nav-dropdown">
+          <Link to="/update-profile" className="nav-dropdown">
+            Update profile
+          </Link>
         </NavDropdown.Item>
-        <NavDropdown.Item className="nav-dropdown" onClick={props.onLogout}>
+        <NavDropdown.Item className="nav-dropdown" onClick={props.handleLogout}>
           Logout
         </NavDropdown.Item>
       </NavDropdown>

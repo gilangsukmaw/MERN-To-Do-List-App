@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import { AiOutlineCheck, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import AddModalComponent from "../../component/Modal/AddModal";
-import EditModalComponent from "../../component/Modal/EditModal";
-import Spinner from "../../component/Spinner/Spinner";
-import Redirect from "../../component/Redirect/UnAuthRedirect";
-// import Data from "./Data";
+import AddModalComponent from "../../Modal/AddModal";
+import EditModalComponent from "../../Modal/EditModal";
+import Spinner from "../../Spinner/Spinner";
+import Navbar from "../../Navbar/Navbar";
+import Data from "./Data";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext";
 
 const App = () => {
-  const { loggedIn } = useContext(AuthContext);
   const [spinner, setSpinner] = useState(false);
-  const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState(Data);
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -51,6 +49,7 @@ const App = () => {
   };
 
   const statusUpdate = async (id, statusParam) => {
+    console.log(statusParam);
     const reqValue = { status: statusParam };
     axios
       .post(
@@ -63,8 +62,6 @@ const App = () => {
             data._id === id ? { ...data, status: statusParam } : data
           )
         );
-
-        //toastify?
       })
       .catch((error) => {
         console.log(error);
@@ -87,56 +84,53 @@ const App = () => {
   };
   return (
     <>
-      {loggedIn ? (
-        <div className="main">
-          <Container fluid>
-            <div className="d-flex justify-content-center">
-              <div className="task-list">
-                <Button
-                  variant=""
-                  type="button"
-                  onClick={modalShow}
-                  className="btn btn-add btn-outline-primary rounded-pill"
-                >
-                  Create new task
-                </Button>
+      <Navbar />
+      <div className="main">
+        <Container fluid>
+          <div className="d-flex justify-content-center">
+            <div className="task-list">
+              <Button
+                variant=""
+                type="button"
+                onClick={modalShow}
+                className="btn btn-add btn-outline-primary rounded-pill"
+              >
+                Create new task
+              </Button>
 
-                <AddModalComponent
-                  show={modal}
-                  onHide={() => {
-                    setModal(false);
-                  }}
-                />
+              <AddModalComponent
+                show={modal}
+                onHide={() => {
+                  setModal(false);
+                }}
+              />
 
-                {spinner ? (
-                  <Spinner />
-                ) : (
-                  <Table responsive>
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>To Do</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th className="col-2">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <TaskList
-                        dataList={dataList}
-                        deleteTask={deleteTask}
-                        statusHandle={statusHandle}
-                      />
-                    </tbody>
-                  </Table>
-                )}
-              </div>
+              {spinner ? (
+                <Spinner />
+              ) : (
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>To Do</th>
+                      <th>Description</th>
+                      <th>Date</th>
+                      <th className="col-2">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <TaskList
+                      dataList={dataList}
+                      deleteTask={deleteTask}
+                      statusHandle={statusHandle}
+                    />
+                  </tbody>
+                </Table>
+              )}
             </div>
-          </Container>
-        </div>
-      ) : (
-        <Redirect />
-      )}
+          </div>
+        </Container>
+      </div>
     </>
   );
 };

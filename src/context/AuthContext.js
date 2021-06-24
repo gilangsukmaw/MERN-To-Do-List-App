@@ -1,27 +1,63 @@
-import React, { createContext, useState, useEffect } from "react";
-import axios from "axios";
-const AuthContext = createContext();
+import React, { useContext, useEffect, useState } from "react";
+import { auth } from "../firebase";
 
-const AuthContextProvider = (props) => {
-  const [loggedIn, setLoggedIn] = useState(undefined);
-  //request
-  const getLoggedIn = async () => {
-    const loggedInRes = await axios.get(
-      "https://simple-to-do-list-app-0.herokuapp.com/api/v1/loggedin"
-    );
-    setLoggedIn(loggedInRes.data);
-  };
+const AuthContext = React.createContext();
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
+
+  function signup(email, password) {
+    return auth.createUserWithEmailAndPassword(email, password);
+  }
+  function login(email, password) {
+    return auth.signInWithEmailAndPassword(email, password);
+  }
+
+  function forgot(email) {
+    return auth.sendPasswordResetEmail(email);
+  }
+
+  function updateEmail(email) {
+    return currentUser.updateEmail(email);
+  }
+
+  function updatePassword(password) {
+    return currentUser.updatePassword(password);
+  }
+
+  function logout() {
+    return auth.signOut();
+  }
 
   useEffect(() => {
-    getLoggedIn();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
+
+    return unsubscribe;
   }, []);
 
+  const value = {
+    currentUser,
+    signup,
+    login,
+    logout,
+    forgot,
+    updateEmail,
+    updatePassword,
+  };
+
   return (
-    <AuthContext.Provider value={{ loggedIn, getLoggedIn }}>
-      {props.children}
-    </AuthContext.Provider>
+    <>
+      <AuthContext.Provider value={value}>
+        {!loading && children}
+      </AuthContext.Provider>
+    </>
   );
 };
-
-export default AuthContext;
-export { AuthContextProvider };
