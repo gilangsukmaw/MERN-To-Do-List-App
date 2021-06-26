@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Card, Button, Form, Alert } from "react-bootstrap";
+import { Card, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -37,7 +37,11 @@ const Login = () => {
             <Card.Body>
               <Card.Title className="text-center">Login</Card.Title>
               <Card.Text>
-                {error && <Alert variant="danger">{error}</Alert>}
+                {error && (
+                  <h5 className="text-center" style={{ color: "red" }}>
+                    {error}
+                  </h5>
+                )}
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3" controlId="formUsername">
                     <Form.Control

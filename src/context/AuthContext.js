@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
+import axios from "axios";
 
 const AuthContext = React.createContext();
 
@@ -12,10 +13,30 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   function signup(email, password) {
-    return auth.createUserWithEmailAndPassword(email, password);
+    axios.post(
+      "http://localhost:5000/api/v1/register",
+      { email: email },
+      { withCredentials: true }
+    );
+
+    const firebaseRegister = auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    return firebaseRegister;
   }
   function login(email, password) {
-    return auth.signInWithEmailAndPassword(email, password);
+    axios.post(
+      "http://localhost:5000/api/v1/login",
+      { email: email },
+      { withCredentials: true }
+    );
+    const firebaseRegister = auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    const firebaseLogin = auth.signInWithEmailAndPassword(email, password);
+    return firebaseLogin;
   }
 
   function forgot(email) {
@@ -31,7 +52,16 @@ export const AuthProvider = ({ children }) => {
   }
 
   function logout() {
-    return auth.signOut();
+    axios
+      .get("http://localhost:5000/api/v1/logout", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        return auth.signOut();
+      })
+      .catch((err) => {
+        return err;
+      });
   }
 
   useEffect(() => {

@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Row, Col, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 
 const ModalComponent = (props) => {
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
   const [value, setValue] = useState({
     name: "",
     description: "",
+    email: currentUser.email,
   });
+
+  const notifyErr = (value) => {
+    toast.error(value, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   const onChange = (e) => {
     const targetName = e.target.name;
@@ -16,7 +34,7 @@ const ModalComponent = (props) => {
 
   const getTask = async (id) => {
     axios
-      .get("https://simple-to-do-list-app-0.herokuapp.com/api/v2/" + id)
+      .get("http://localhost:5000/api/v2/id/" + id)
       .then((response) => {
         setValue({
           name: response.data.name,
@@ -24,23 +42,25 @@ const ModalComponent = (props) => {
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   };
 
   const updateTask = async (id) => {
     console.log(value);
     axios
-      .post(
-        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/update/" + id,
-        value
-      )
+      .post("http://localhost:5000/api/v2/update/" + id, value)
       .then((response) => {
         props.onHide();
         window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
+        const resMessage = error.response.data.message;
+        if (resMessage.name === "TokenExpiredError") {
+          logout();
+          notifyErr("Your token is outdated, Login to continue!");
+          history.push("/login");
+        }
       });
   };
 

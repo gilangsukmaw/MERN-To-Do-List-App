@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Card, Button, Form, Alert } from "react-bootstrap";
+import { Card, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -20,7 +20,6 @@ const Forgot = () => {
       setLoading(true);
       await forgot(emailRef.current.value);
       setSuccess("Check your email, for reset password!");
-      history.push("/");
     } catch (err) {
       if (err.code === "auth/user-not-found") {
         setError("Email not found");
@@ -33,25 +32,43 @@ const Forgot = () => {
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Forgot password</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-
-      <div className="w-100 text-center mt-2">
-        Didn't have account? <Link to="/login">Sign Up</Link>
+      <div className="login">
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <Card style={{ width: "25rem" }}>
+            <Card.Body>
+              <Card.Title className="text-center">Login</Card.Title>
+              <Card.Text>
+                {success && (
+                  <h5 className="text-center" style={{ color: "green" }}>
+                    {success}
+                  </h5>
+                )}
+                {error && (
+                  <h5 className="text-center" style={{ color: "red" }}>
+                    {error}
+                  </h5>
+                )}
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group id="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" ref={emailRef} required />
+                  </Form.Group>
+                  <Button disabled={loading} className="w-100" type="submit">
+                    Submit
+                  </Button>
+                  <div className="footer">
+                    <h6>
+                      Already have an account? <Link to="/login">Log In</Link>
+                    </h6>
+                    <h5>
+                      Didn't have account? <Link to="/signup">Sign Up</Link>
+                    </h5>
+                  </div>
+                </Form>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </div>
       </div>
     </>
   );

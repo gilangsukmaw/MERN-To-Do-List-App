@@ -25,8 +25,13 @@ const Signup = () => {
       await signup(emailRef.current.value, passwordRef.current.value);
       setSuccess("Account Created");
       history.push("/");
-    } catch {
-      setError("Failed to create an account!");
+    } catch (err) {
+      console.log(err.code);
+      if (err.code === "auth/email-already-in-use") {
+        setError("Email already in use");
+      } else {
+        setError("Failed to create an account!");
+      }
     }
     setLoading(false);
   };
@@ -92,7 +97,7 @@ const Signup = () => {
                 </Form>
                 <div className="footer">
                   <h6>
-                    <Link to="/login">Forgot Password</Link>
+                    <Link to="/forgot-password">Forgot Password</Link>
                   </h6>
                   <h5>
                     Already have an account? <Link to="/login">Log In</Link>

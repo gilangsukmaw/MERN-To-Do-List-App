@@ -5,26 +5,42 @@ import AddModalComponent from "../../Modal/AddModal";
 import EditModalComponent from "../../Modal/EditModal";
 import Spinner from "../../Spinner/Spinner";
 import Navbar from "../../Navbar/Navbar";
-import Data from "./Data";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
 
 const App = () => {
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
   const [spinner, setSpinner] = useState(false);
-  const [dataList, setDataList] = useState(Data);
+  const [dataList, setDataList] = useState([]);
   const [modal, setModal] = useState(false);
+
+  const notifyErr = (value) => {
+    toast.error(value, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
   useEffect(() => {
     setSpinner(true);
     setTimeout(() => {
       setSpinner(false);
     }, 1000);
-    getTaskList();
+    getData();
   }, []);
 
   //request
   const deleteTask = async (id) => {
     axios
-      .delete("https://simple-to-do-list-app-0.herokuapp.com/api/v2/" + id)
+      .delete("http://localhost:5000/api/v2/" + id)
       .then((response) => {
         let newTaskList = dataList.filter((data) => data._id !== id);
         setDataList(newTaskList);
@@ -34,28 +50,28 @@ const App = () => {
       });
   };
 
-  const getTaskList = async () => {
+  const getData = async () => {
     axios
-      .get("https://simple-to-do-list-app-0.herokuapp.com/api/v2/")
+      .get("http://localhost:5000/api/v2/" + currentUser.email)
       .then((response) => {
         if (response.data.length > 0) {
-          const resData = response.data;
-          setDataList(resData);
+          setDataList(response.data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        const resMessage = error.response.data.message;
+        if (resMessage.name === "TokenExpiredError") {
+          logout();
+          notifyErr("Your token is outdated, Login to continue!");
+          history.push("/login");
+        }
       });
   };
 
   const statusUpdate = async (id, statusParam) => {
-    console.log(statusParam);
     const reqValue = { status: statusParam };
     axios
-      .post(
-        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/status/" + id,
-        reqValue
-      )
+      .post("http://localhost:5000/api/v2/status/" + id, reqValue)
       .then((response) => {
         setDataList(
           dataList.map((data) =>
@@ -82,6 +98,7 @@ const App = () => {
   const modalShow = () => {
     setModal(true);
   };
+
   return (
     <>
       <Navbar />
