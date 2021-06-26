@@ -34,7 +34,7 @@ const ModalComponent = (props) => {
 
   const addTask = async (id) => {
     axios
-      .post("http://localhost:5000/api/v2/add", value)
+      .post("https://simple-to-do-list-app-0.herokuapp.com/api/v2/add", value)
       .then((response) => {
         props.onHide();
         window.location.reload();

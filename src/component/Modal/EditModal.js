@@ -34,7 +34,7 @@ const ModalComponent = (props) => {
 
   const getTask = async (id) => {
     axios
-      .get("http://localhost:5000/api/v2/id/" + id)
+      .get("https://simple-to-do-list-app-0.herokuapp.com/v2/id/" + id)
       .then((response) => {
         setValue({
           name: response.data.name,

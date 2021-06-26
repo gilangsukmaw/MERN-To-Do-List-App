@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   function signup(email, password) {
     axios.post(
-      "http://localhost:5000/api/v1/register",
+      "https://simple-to-do-list-app-0.herokuapp.com",
       { email: email },
       { withCredentials: true }
     );
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   }
   function login(email, password) {
     axios.post(
-      "http://localhost:5000/api/v1/login",
+      "https://simple-to-do-list-app-0.herokuapp.com",
       { email: email },
       { withCredentials: true }
     );
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   function logout() {
     axios
-      .get("http://localhost:5000/api/v1/logout", {
+      .get("https://simple-to-do-list-app-0.herokuapp.com", {
         withCredentials: true,
       })
       .then((response) => {

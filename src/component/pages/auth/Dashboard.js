@@ -40,7 +40,7 @@ const App = () => {
   //request
   const deleteTask = async (id) => {
     axios
-      .delete("http://localhost:5000/api/v2/" + id)
+      .delete("https://simple-to-do-list-app-0.herokuapp.com/api/v2/" + id)
       .then((response) => {
         let newTaskList = dataList.filter((data) => data._id !== id);
         setDataList(newTaskList);
@@ -52,7 +52,10 @@ const App = () => {
 
   const getData = async () => {
     axios
-      .get("http://localhost:5000/api/v2/" + currentUser.email)
+      .get(
+        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/" +
+          currentUser.email
+      )
       .then((response) => {
         if (response.data.length > 0) {
           setDataList(response.data);
@@ -71,7 +74,10 @@ const App = () => {
   const statusUpdate = async (id, statusParam) => {
     const reqValue = { status: statusParam };
     axios
-      .post("http://localhost:5000/api/v2/status/" + id, reqValue)
+      .post(
+        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/status/" + id,
+        reqValue
+      )
       .then((response) => {
         setDataList(
           dataList.map((data) =>
