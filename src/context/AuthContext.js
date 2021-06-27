@@ -32,10 +32,7 @@ export const AuthProvider = ({ children }) => {
       { email: email },
       { withCredentials: true }
     );
-    const firebaseRegister = auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
+
     const firebaseLogin = auth.signInWithEmailAndPassword(email, password);
     return firebaseLogin;
   }
