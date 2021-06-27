@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 import axios from "axios";
 
 const AuthContext = React.createContext();
+const { REACT_APP_API } = process.env;
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   function signup(email, password) {
     axios.post(
-      "https://simple-to-do-list-app-0.herokuapp.com",
+      `${REACT_APP_API}/v1/register`,
       { email: email },
       { withCredentials: true }
     );
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   }
   function login(email, password) {
     axios.post(
-      "https://simple-to-do-list-app-0.herokuapp.com",
+      `${REACT_APP_API}/v1/register"`,
       { email: email },
       { withCredentials: true }
     );
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   function logout() {
     axios
-      .get("https://simple-to-do-list-app-0.herokuapp.com", {
+      .get(`${REACT_APP_API}/v1/login`, {
         withCredentials: true,
       })
       .then((response) => {

@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
+const { REACT_APP_API } = process.env;
 
 const App = () => {
   const { currentUser, logout } = useAuth();
@@ -40,7 +41,7 @@ const App = () => {
   //request
   const deleteTask = async (id) => {
     axios
-      .delete("https://simple-to-do-list-app-0.herokuapp.com/api/v2/" + id)
+      .delete(`${REACT_APP_API}/v2/` + id)
       .then((response) => {
         let newTaskList = dataList.filter((data) => data._id !== id);
         setDataList(newTaskList);
@@ -52,10 +53,7 @@ const App = () => {
 
   const getData = async () => {
     axios
-      .get(
-        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/" +
-          currentUser.email
-      )
+      .get(`${REACT_APP_API}/v2/` + currentUser.email)
       .then((response) => {
         if (response.data.length > 0) {
           setDataList(response.data);
@@ -74,10 +72,7 @@ const App = () => {
   const statusUpdate = async (id, statusParam) => {
     const reqValue = { status: statusParam };
     axios
-      .post(
-        "https://simple-to-do-list-app-0.herokuapp.com/api/v2/status/" + id,
-        reqValue
-      )
+      .post(`${REACT_APP_API}/v2/status/` + id, reqValue)
       .then((response) => {
         setDataList(
           dataList.map((data) =>

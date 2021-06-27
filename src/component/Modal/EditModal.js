@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+const { REACT_APP_API } = process.env;
 
 const ModalComponent = (props) => {
   const { currentUser, logout } = useAuth();
@@ -34,7 +35,7 @@ const ModalComponent = (props) => {
 
   const getTask = async (id) => {
     axios
-      .get("https://simple-to-do-list-app-0.herokuapp.com/v2/id/" + id)
+      .get(`${REACT_APP_API}/v2/id/` + id)
       .then((response) => {
         setValue({
           name: response.data.name,
@@ -49,7 +50,7 @@ const ModalComponent = (props) => {
   const updateTask = async (id) => {
     console.log(value);
     axios
-      .post("http://localhost:5000/api/v2/update/" + id, value)
+      .post(`${REACT_APP_API}/v2/update/` + id, value)
       .then((response) => {
         props.onHide();
         window.location.reload();

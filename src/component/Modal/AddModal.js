@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
+const { REACT_APP_API } = process.env;
 
 const ModalComponent = (props) => {
   const { currentUser, logout } = useAuth();
@@ -34,7 +35,7 @@ const ModalComponent = (props) => {
 
   const addTask = async (id) => {
     axios
-      .post("https://simple-to-do-list-app-0.herokuapp.com/api/v2/add", value)
+      .post(`${REACT_APP_API}/v2/add`, value)
       .then((response) => {
         props.onHide();
         window.location.reload();
