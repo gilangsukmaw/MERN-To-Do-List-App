@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   }
   function login(email, password) {
     axios.post(
-      `${REACT_APP_API}/v1/register"`,
+      `${REACT_APP_API}/v1/login`,
       { email: email },
       { withCredentials: true }
     );
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   function logout() {
     axios
-      .get(`${REACT_APP_API}/v1/login`, {
+      .get(`${REACT_APP_API}/v1/logout`, {
         withCredentials: true,
       })
       .then((response) => {
