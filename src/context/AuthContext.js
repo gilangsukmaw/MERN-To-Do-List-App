@@ -42,7 +42,20 @@ export const AuthProvider = ({ children }) => {
   }
 
   function updateEmail(email) {
-    return currentUser.updateEmail(email);
+    axios.post(
+      `${REACT_APP_API}/v1/change/email`,
+      { email: email },
+      { withCredentials: true }
+    );
+
+    axios.post(
+      `${REACT_APP_API}/v2/updates/all`,
+      { email: email },
+      { withCredentials: true }
+    );
+
+    const firebaseUpdateEmail = currentUser.updateEmail(email);
+    return firebaseUpdateEmail;
   }
 
   function updatePassword(password) {
