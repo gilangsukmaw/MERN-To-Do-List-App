@@ -41,23 +41,6 @@ export const AuthProvider = ({ children }) => {
     return auth.sendPasswordResetEmail(email);
   }
 
-  function updateEmail(email) {
-    axios.post(
-      `${REACT_APP_API}/v1/change/email`,
-      { email: email },
-      { withCredentials: true }
-    );
-
-    axios.post(
-      `${REACT_APP_API}/v2/updates/all`,
-      { email: email },
-      { withCredentials: true }
-    );
-
-    const firebaseUpdateEmail = currentUser.updateEmail(email);
-    return firebaseUpdateEmail;
-  }
-
   function updatePassword(password) {
     return currentUser.updatePassword(password);
   }
@@ -90,7 +73,6 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     forgot,
-    updateEmail,
     updatePassword,
   };
 

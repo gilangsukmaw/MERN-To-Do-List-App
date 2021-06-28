@@ -13,7 +13,7 @@ const UpdateProfile = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { currentUser, updateEmail, updatePassword, logout } = useAuth();
+  const { currentUser, updatePassword, logout } = useAuth();
 
   const notifySuccess = (value) => {
     toast.success(value, {
@@ -44,9 +44,7 @@ const UpdateProfile = () => {
     }
     const promises = [];
     setLoading(true);
-    if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value));
-    }
+
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value));
     }
@@ -78,10 +76,7 @@ const UpdateProfile = () => {
           <Card style={{ width: "25rem" }}>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
-                <Form.Group id="email">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" ref={emailRef} required />
-                </Form.Group>
+                <h5 className="text-center">{currentUser.email}</h5>
                 <Form.Group id="password">
                   <Form.Label>Password</Form.Label>
                   <Form.Control

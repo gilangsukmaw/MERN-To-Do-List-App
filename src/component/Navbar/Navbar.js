@@ -86,7 +86,7 @@ const LoggedInNav = (props) => {
       <NavDropdown title={props.currentUser} id="collasible-nav-dropdown">
         <NavDropdown.Item className="nav-dropdown">
           <Link to="/update-profile" className="nav-dropdown">
-            Update profile
+            Change password
           </Link>
         </NavDropdown.Item>
         <NavDropdown.Item className="nav-dropdown" onClick={props.handleLogout}>
